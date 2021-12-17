@@ -1,7 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");   
 
 const DEV_MODE = process.env.NODE_ENV === 'development';
@@ -146,7 +147,15 @@ module.exports = {
       filename: DEV_MODE ? 'css/[name].css' : `css/[name]${CONTENT_HASH}.css`,
     }),
     new CleanWebpackPlugin(),
-    // new CompressionPlugin() // 產生壓縮打包檔案
+    // new CompressionPlugin(), // 產生壓縮打包檔案
+    new CopyPlugin({ // 可以將需要的 src 的資料夾 複製到 dist 資料夾上
+      patterns: [
+        {
+          from: "static", to: "static"
+        },
+        // { from: "other", to: "public" },
+      ],
+    }),
   ],
   devServer: {
     liveReload : true, // 如果要開啟 watchFiles 和 hot, option 都要設置
